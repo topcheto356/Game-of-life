@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Naviagation = (props) => {
+	const [showSt, setShowSt] = useState(false);
+
 	const onClickGridHandler = () => {
 		props.showForm(false);
+		setShowSt(false);
+
+		props.reset();
 	};
 
 	const onClickSeedsHandler = () => {
 		props.loadGerneration0();
-		props.showStart(true);
+		setShowSt(true);
 	};
 
 	const onClickStartHandler = () => {
@@ -15,13 +20,13 @@ const Naviagation = (props) => {
 	};
 
 	return (
-		<nav className="navigation">
-			<ul className="list">
+		<nav className='navigation'>
+			<ul className='list'>
 				<li onClick={onClickGridHandler}>Create grid</li>
 				{props.showSe && (
 					<li onClick={onClickSeedsHandler}>Confirm selected seeds</li>
 				)}
-				{props.showSt && <li onClick={onClickStartHandler}>Start</li>}
+				{showSt && <li onClick={onClickStartHandler}>Start</li>}
 			</ul>
 		</nav>
 	);

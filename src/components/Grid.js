@@ -9,29 +9,31 @@ const Grid = (props) => {
 	};
 
 	return (
-		<div className="grid">
+		<div className='grid'>
 			{props.grid.map((fel, i) => {
 				const outsideRow =
-					i >= props.bonus && i <= props.grid.length - props.bonus;
-				return outsideRow ? (
-					<div className="row" key={`row-${i}`}>
-						{fel.map((sel, j) => {
-							const outsideColumn =
-								j >= props.bonus && j <= props.grid.length - props.bonus;
-							const className = sel ? 'squere-alive' : 'squere-dead';
-							return outsideColumn ? (
-								<div
-									className={className}
-									key={`row-${i} column-${j}`}
-									onClick={(event) => onClickHandler(event, `${i},${j}`)}
-								></div>
-							) : (
-								''
-							);
-						})}
-					</div>
-				) : (
-					''
+					i >= props.bonus && i < props.grid.length - props.bonus;
+
+				return (
+					outsideRow && (
+						<div className='row' key={`row-${i}`}>
+							{fel.map((sel, j) => {
+								const outsideColumn =
+									j >= props.bonus && j < fel.length - props.bonus;
+
+								const className = sel ? 'squere-alive' : 'squere-dead';
+								return (
+									outsideColumn && (
+										<div
+											className={className}
+											key={`row-${i} column-${j}`}
+											onClick={(event) => onClickHandler(event, `${i},${j}`)}
+										></div>
+									)
+								);
+							})}
+						</div>
+					)
 				);
 			})}
 		</div>

@@ -8,7 +8,6 @@ import { createGeneration0, make2DArray, nextGeneration } from './script';
 function App() {
 	const [showF, setShowForm] = useState(false);
 	const [showSe, setShowSeed] = useState(false);
-	const [showSt, setStartSeed] = useState(false);
 
 	const [getGrid, setGetGrid] = useState();
 	const [seeds, setSeeds] = useState([]);
@@ -16,16 +15,19 @@ function App() {
 
 	const bonus = 10;
 
+	const reset = () => {
+		setShowSeed(false);
+		setGetGrid();
+		setSeeds([]);
+		setGridSize();
+	};
+
 	const showForm = (show) => {
 		show ? setShowForm(false) : setShowForm(true);
 	};
 
 	const showSeeds = (show) => {
-		show && gridSize ? setShowSeed(true) : setShowSeed(false);
-	};
-
-	const showStart = (show) => {
-		show && seeds ? setStartSeed(true) : setStartSeed(false);
+		show ? setShowSeed(true) : setShowSeed(false);
 	};
 
 	const loadGrid = (size) => {
@@ -61,8 +63,7 @@ function App() {
 				loadGerneration0={loadGerneration0}
 				start={start}
 				showSe={showSe}
-				showStart={showStart}
-				showSt={showSt}
+				reset={reset}
 			/>
 			{showF && (
 				<SelectGrid
