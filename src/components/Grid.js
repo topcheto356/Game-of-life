@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Grid = (props) => {
+	//show selected seeds for generation 0
 	const onClickHandler = (event, key) => {
 		props.loadSeeds(key);
 
@@ -11,6 +12,7 @@ const Grid = (props) => {
 	return (
 		<div className='grid'>
 			{props.grid.map((fel, i) => {
+				//only render cells in given grid
 				const outsideRow =
 					i >= props.bonus && i < props.grid.length - props.bonus;
 
@@ -18,6 +20,7 @@ const Grid = (props) => {
 					outsideRow && (
 						<div className='row' key={`row-${i}`}>
 							{fel.map((sel, j) => {
+								//only render cells in given grid
 								const outsideColumn =
 									j >= props.bonus && j < fel.length - props.bonus;
 

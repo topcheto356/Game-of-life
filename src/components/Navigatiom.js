@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 
 const Naviagation = (props) => {
+	//show next generation button state
 	const [showSt, setShowSt] = useState(false);
 
+	//remove hte for after the grid is selected
 	const onClickGridHandler = () => {
 		props.showForm(false);
-		setShowSt(false);
 
+		//reset the game
+		setShowSt(false);
 		props.reset();
 	};
 
+	//render generation 0
 	const onClickSeedsHandler = () => {
 		props.loadGerneration0();
 		setShowSt(true);
 	};
 
+	//render next generation
 	const onClickStartHandler = () => {
 		props.start();
 	};
@@ -26,7 +31,7 @@ const Naviagation = (props) => {
 				{props.showSe && (
 					<li onClick={onClickSeedsHandler}>Confirm selected seeds</li>
 				)}
-				{showSt && <li onClick={onClickStartHandler}>Start</li>}
+				{showSt && <li onClick={onClickStartHandler}>Next generation</li>}
 			</ul>
 		</nav>
 	);

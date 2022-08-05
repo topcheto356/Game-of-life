@@ -75,6 +75,7 @@ const checkNeighbours = (gen, i, j) => {
 export const nextGeneration = (grid, gen) => {
 	const newGen = make2DArray(grid, gen);
 
+	// i=1 and j=1 are because first and last row and last column are seen as the do not exist
 	for (let i = 1; i < grid[0] - 1; i++) {
 		for (let j = 1; j < grid[1] - 1; j++) {
 			newGen[i][j] = checkNeighbours(gen, i, j);
