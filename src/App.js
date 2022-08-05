@@ -71,6 +71,7 @@ function App() {
 
 	//render generation 0
 	const loadGerneration0 = () => {
+		setShowSeed(false);
 		setGetGrid(createGeneration0(gridSize, seeds));
 	};
 

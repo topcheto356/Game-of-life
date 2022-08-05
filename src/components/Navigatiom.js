@@ -4,7 +4,7 @@ const Naviagation = (props) => {
 	//show next generation button state
 	const [showSt, setShowSt] = useState(false);
 
-	//remove hte for after the grid is selected
+	//remove the for after the grid is selected
 	const onClickGridHandler = () => {
 		props.showForm(false);
 
