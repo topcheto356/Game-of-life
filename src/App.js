@@ -1,25 +1,79 @@
-import logo from './logo.svg';
+import { Fragment, useState } from 'react';
 import './App.css';
+import Naviagation from './components/Navigatiom';
+import SelectGrid from './components/SelectGrid';
+import Grid from './components/Grid';
+import { createGeneration0, make2DArray, nextGeneration } from './script';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [showF, setShowForm] = useState(false);
+	const [showSe, setShowSeed] = useState(false);
+	const [showSt, setStartSeed] = useState(false);
+
+	const [getGrid, setGetGrid] = useState();
+	const [seeds, setSeeds] = useState([]);
+	const [gridSize, setGridSize] = useState();
+
+	const bonus = 10;
+
+	const showForm = (show) => {
+		show ? setShowForm(false) : setShowForm(true);
+	};
+
+	const showSeeds = (show) => {
+		show && gridSize ? setShowSeed(true) : setShowSeed(false);
+	};
+
+	const showStart = (show) => {
+		show && seeds ? setStartSeed(true) : setStartSeed(false);
+	};
+
+	const loadGrid = (size) => {
+		setGridSize([Number(size[0]) + bonus * 2, Number(size[1]) + bonus * 2]);
+		setGetGrid(
+			make2DArray([Number(size[0]) + bonus * 2, Number(size[1]) + bonus * 2])
+		);
+	};
+
+	const loadSeeds = (key) => {
+		let newSeeds = [...seeds];
+		const index = newSeeds.indexOf(key);
+
+		if (index >= 0) {
+			newSeeds.splice(index, 1);
+		} else newSeeds.push(key);
+
+		setSeeds(newSeeds);
+	};
+
+	const loadGerneration0 = () => {
+		setGetGrid(createGeneration0(gridSize, seeds));
+	};
+
+	const start = () => {
+		setGetGrid(nextGeneration(gridSize, getGrid));
+	};
+
+	return (
+		<Fragment>
+			<Naviagation
+				showForm={showForm}
+				loadGerneration0={loadGerneration0}
+				start={start}
+				showSe={showSe}
+				showStart={showStart}
+				showSt={showSt}
+			/>
+			{showF && (
+				<SelectGrid
+					showForm={showForm}
+					loadGrid={loadGrid}
+					showSeeds={showSeeds}
+				/>
+			)}
+			{getGrid && <Grid grid={getGrid} loadSeeds={loadSeeds} bonus={bonus} />}
+		</Fragment>
+	);
 }
 
 export default App;
