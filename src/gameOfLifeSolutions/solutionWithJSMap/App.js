@@ -3,30 +3,23 @@ import './App.css';
 import Naviagation from './components/Navigatiom';
 import SelectGrid from './components/SelectGrid';
 import Grid from './components/Grid';
-import { createGeneration0, make2DArray, nextGeneration } from './gameOfLife';
+import { createNextGeneration } from './gameOfLife';
 
 function App() {
 	//Form state (visible or not)
 	const [showF, setShowForm] = useState(false);
-	//Button to confirm seeds state (visible or not)
-	const [showSe, setShowSeed] = useState(false);
+	//Button for the next generation
+	const [showNext, setShowNext] = useState(false);
 
 	//Current generation state
-	const [getGrid, setGetGrid] = useState();
-	//Seeds (alive cells from the beggining)
-	const [seeds, setSeeds] = useState([]);
+	const [generation, setGeneration] = useState(new Map());
 	//Grid size
 	const [gridSize, setGridSize] = useState();
 
-	//cells that are not rendered on the screen, but are in current generation
-	const bonus = 3;
-
 	//reset the game
 	const reset = () => {
-		setShowSeed(false);
-		setGetGrid();
-		setSeeds([]);
-		setGridSize();
+		setShowNext(false);
+		setGeneration(new Map());
 	};
 
 	//show form
@@ -34,69 +27,52 @@ function App() {
 		show ? setShowForm(false) : setShowForm(true);
 	};
 
-	//show confirm seeds button
-	const showSeeds = (show) => {
-		show ? setShowSeed(true) : setShowSeed(false);
+	//show next generation button
+	const showNextGenerationButton = (show) => {
+		show ? setShowNext(true) : setShowNext(false);
 	};
 
-	//show selected grid size
+	//set grid size
 	const loadGrid = (size) => {
-		//update grid size
-		setGridSize([Number(size[0]) + bonus * 2, Number(size[1]) + bonus * 2]);
-
-		//update grid state before generation 0
-		setGetGrid(
-			make2DArray([Number(size[0]) + bonus * 2, Number(size[1]) + bonus * 2])
-		);
+		setGridSize(size);
 	};
 
-	//select starting seeds
-	const loadSeeds = (key) => {
-		//get selected seeds
-		let newSeeds = [...seeds];
-
-		//get index of selected seed from seeds if its there
-		const index = newSeeds.indexOf(key);
-
-		if (index >= 0) {
-			//if its in selected => remove from selected
-			newSeeds.splice(index, 1);
-
-			//if its Not in selected => add to selected
-		} else newSeeds.push(key);
-
-		//update seeds
-		setSeeds(newSeeds);
-	};
-
-	//render generation 0
-	const loadGerneration0 = () => {
-		setShowSeed(false);
-		setGetGrid(createGeneration0(gridSize, seeds));
+	//select generation 0
+	const selectGeneraion0 = (cords) => {
+		if (generation.get(cords)) {
+			generation.delete(cords);
+		} else {
+			generation.set(cords, true);
+		}
 	};
 
 	//render next generation
-	const start = () => {
-		setGetGrid(nextGeneration(gridSize, getGrid));
+	const loadNextGerneration = () => {
+		setGeneration(createNextGeneration(generation));
 	};
 
 	return (
 		<Fragment>
 			<Naviagation
 				showForm={showForm}
-				loadGerneration0={loadGerneration0}
-				start={start}
-				showSe={showSe}
+				loadNextGerneration={loadNextGerneration}
+				showNext={showNext}
 				reset={reset}
 			/>
 			{showF && (
 				<SelectGrid
 					showForm={showForm}
 					loadGrid={loadGrid}
-					showSeeds={showSeeds}
+					showNextGenerationButton={showNextGenerationButton}
 				/>
 			)}
-			{getGrid && <Grid grid={getGrid} loadSeeds={loadSeeds} bonus={bonus} />}
+			{generation && (
+				<Grid
+					generation={generation}
+					gridSize={gridSize}
+					selectGeneraion0={selectGeneraion0}
+				/>
+			)}
 		</Fragment>
 	);
 }
