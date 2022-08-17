@@ -68,6 +68,7 @@ function App() {
 
 	//render next generation
 	const loadNextGerneration = () => {
+		console.log(generation);
 		setGeneration(createNextGeneration(generation));
 	};
 
