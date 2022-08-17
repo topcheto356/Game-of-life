@@ -33,6 +33,7 @@ const SelectGrid = (props) => {
 			column: Number(grid.width),
 		};
 
+		props.showForm(false);
 		props.loadGrid(size);
 		props.showNextGenerationButton(true);
 	};

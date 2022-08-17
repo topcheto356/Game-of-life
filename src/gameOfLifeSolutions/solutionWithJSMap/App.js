@@ -16,15 +16,34 @@ function App() {
 	//Grid size
 	const [gridSize, setGridSize] = useState();
 
+	const [rows, setRows] = useState([]);
+	const [columns, setColumns] = useState([]);
+
+	const makeArraysToRenderGrid = (grid) => {
+		const row = [];
+		const column = [];
+
+		for (let i = 0; i < grid.row; i++) {
+			row.push(0);
+		}
+
+		for (let i = 0; i < grid.column; i++) {
+			column.push(0);
+		}
+		setRows(row);
+		setColumns(column);
+	};
+
 	//reset the game
 	const reset = () => {
 		setShowNext(false);
+		setGridSize();
 		setGeneration(new Map());
 	};
 
 	//show form
 	const showForm = (show) => {
-		show ? setShowForm(false) : setShowForm(true);
+		show ? setShowForm(true) : setShowForm(false);
 	};
 
 	//show next generation button
@@ -35,6 +54,7 @@ function App() {
 	//set grid size
 	const loadGrid = (size) => {
 		setGridSize(size);
+		makeArraysToRenderGrid(size);
 	};
 
 	//select generation 0
@@ -59,6 +79,7 @@ function App() {
 				showNext={showNext}
 				reset={reset}
 			/>
+			{showF}
 			{showF && (
 				<SelectGrid
 					showForm={showForm}
@@ -66,11 +87,14 @@ function App() {
 					showNextGenerationButton={showNextGenerationButton}
 				/>
 			)}
-			{generation && (
+
+			{gridSize && (
 				<Grid
 					generation={generation}
 					gridSize={gridSize}
 					selectGeneraion0={selectGeneraion0}
+					rows={rows}
+					columns={columns}
 				/>
 			)}
 		</Fragment>

@@ -3,7 +3,7 @@ import React from 'react';
 const Naviagation = (props) => {
 	//remove the for after the grid is selected
 	const onClickGridHandler = () => {
-		props.showForm(false);
+		props.showForm(true);
 		props.reset();
 	};
 
