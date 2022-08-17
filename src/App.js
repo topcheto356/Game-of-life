@@ -3,7 +3,7 @@ import './App.css';
 import Naviagation from './components/Navigatiom';
 import SelectGrid from './components/SelectGrid';
 import Grid from './components/Grid';
-import { createGeneration0, make2DArray, nextGeneration } from './script';
+import { createGeneration0, make2DArray, nextGeneration } from './gameOfLife';
 
 function App() {
 	//Form state (visible or not)
