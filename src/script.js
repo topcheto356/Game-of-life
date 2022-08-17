@@ -102,70 +102,86 @@ map {
 }
 */
 
-const getAliveNeighbours = (cords, generation) => {
-	let aliveCells = 0;
-	const [row, column] = cords.split(',');
+const loopThroughNeighbours = (cords, neededAction) => {
+	const row = Number(cords.split(',')[0]);
+	const column = Number(cords.split(',')[1]);
 
 	for (let i = row - 1; i <= row + 1; i++) {
 		for (let j = column - 1; j <= column + 1; j++) {
-			if (generation.has(`${i},${j}`)) {
-				aliveCells++;
-			}
-			//if
-			else {
-				checkDeadCell(`${i},${j}`, generation);
-			}
+			neededAction(i, j);
 		}
 	}
+};
+
+const getAliveNeighbours = (cords, generation) => {
+	let aliveCells = 0;
+
+	const neededAction = (row, column) => {
+		if (generation.has(`${row},${column}`)) {
+			aliveCells++;
+		}
+	};
+
+	loopThroughNeighbours(cords, neededAction);
 
 	return aliveCells;
 };
 
-const checkDeadCell = (cords, generation) => {
-	const aliveNeighbours = getAliveNeighbours(cords, generation);
+const checkDeadCell = (
+	cords,
+	currentGeneration,
+	newGeneration,
+	checkedDeadCells
+) => {
+	let aliveNeighbours = 0;
 
-	if (aliveNeighbours === 3) {
-		generation.set(cords, true);
-	}
+	const neededAction = (row, column) => {
+		if (!currentGeneration.has(`${row},${column}`)) {
+			if (!checkedDeadCells.has(`${row},${column}`)) {
+				aliveNeighbours = getAliveNeighbours(
+					`${row},${column}`,
+					currentGeneration
+				);
+
+				//not to check same dead cell again
+				checkedDeadCells.set(`${row},${column}`, true);
+
+				if (aliveNeighbours === 3) {
+					newGeneration.set(`${row},${column}`, true);
+				}
+			}
+		}
+	};
+
+	loopThroughNeighbours(cords, neededAction);
 };
 
-const checkCellForNextGeneration = (value, cords, generation) => {
+const checkCellForNextGeneration = (
+	cords,
+	currentGeneration,
+	newGeneration,
+	checkedDeadCells
+) => {
 	//check alive cell
-	const aliveNeighbours = getAliveNeighbours(cords, generation);
+	const aliveNeighbours = getAliveNeighbours(cords, currentGeneration) - 1;
 	if (aliveNeighbours < 2 || aliveNeighbours > 3) {
-		generation.delete(cords);
+		newGeneration.delete(cords);
 	}
 
-	//check dead cells around alive cells
-	checkDeadCell(cords);
+	// check dead cells around alive cell
+	checkDeadCell(cords, currentGeneration, newGeneration, checkedDeadCells);
 };
 
-const createNextGeneration = (generation) => {
+export const createNextGeneration = (generation) => {
+	const checkedDeadCells = new Map();
 	const newGeneration = new Map(
 		JSON.parse(JSON.stringify(Array.from(generation)))
 	);
 
-	newGeneration.forEach(checkCellForNextGeneration);
+	generation.forEach((value, cords, gen) => {
+		checkCellForNextGeneration(cords, gen, newGeneration, checkedDeadCells);
+	});
+
+	checkedDeadCells.clear();
+	return newGeneration;
 };
-
-const checkedDeadCells = new Map();
-const currentGeneration = new Map();
-
-currentGeneration.set('1,2', true);
-currentGeneration.set('5,2', true);
-
-createNextGeneration(currentGeneration);
-
-//create next generation
-// export const nextGeneration = (gen) => {
-// 	const generation = new Map();
-
-// 	// i=1 and j=1 are because first and last row and last column are seen as the do not exist
-// 	for (let i = 1; i < grid[0] - 1; i++) {
-// 		for (let j = 1; j < grid[1] - 1; j++) {
-// 			newGen[i][j] = checkNeighbours(gen, i, j);
-// 		}
-// 	}
-
-// 	return newGen;
-// };
