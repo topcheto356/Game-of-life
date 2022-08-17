@@ -26,12 +26,15 @@ const SelectGrid = (props) => {
 	const submitHandler = (event) => {
 		event.preventDefault();
 
-		const size = [grid.height, grid.width];
+		const size = {
+			// rowMin: 0,
+			row: Number(grid.height),
+			// columnMin: 0,
+			column: Number(grid.width),
+		};
 
 		props.loadGrid(size);
-
-		props.showForm(true);
-		props.showSeeds(true);
+		props.showNextGenerationButton(true);
 	};
 
 	return (
