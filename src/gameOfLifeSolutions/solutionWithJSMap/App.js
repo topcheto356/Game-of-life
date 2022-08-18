@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react';
 import './App.css';
+
 import Naviagation from './components/Navigatiom';
 import SelectGrid from './components/SelectGrid';
 import Grid from './components/Grid';
@@ -16,7 +17,9 @@ function App() {
 	//Grid size
 	const [gridSize, setGridSize] = useState();
 
+	//grid rows
 	const [rows, setRows] = useState([]);
+	//grid columns
 	const [columns, setColumns] = useState([]);
 
 	const makeArraysToRenderGrid = (grid) => {
@@ -74,7 +77,6 @@ function App() {
 
 	//render next generation
 	const loadNextGerneration = () => {
-		console.log(generation);
 		setGeneration(createNextGeneration(generation));
 	};
 
