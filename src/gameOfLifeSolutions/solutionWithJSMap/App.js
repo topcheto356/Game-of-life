@@ -59,11 +59,17 @@ function App() {
 
 	//select generation 0
 	const selectGeneraion0 = (cords) => {
-		if (generation.get(cords)) {
-			generation.delete(cords);
+		const generation0 = new Map(
+			JSON.parse(JSON.stringify(Array.from(generation)))
+		);
+
+		if (generation0.get(cords)) {
+			generation0.delete(cords);
 		} else {
-			generation.set(cords, true);
+			generation0.set(cords, true);
 		}
+
+		setGeneration(generation0);
 	};
 
 	//render next generation
